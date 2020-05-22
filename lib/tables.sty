@@ -9,12 +9,13 @@
 \newcommand\HeadRow{\rowfont{\noindent\sffamily\bfseries\color{white}}\rowcolor{tablegold}}
 \newcommand\RowColors{\rowcolors{2}{white}{tableblue}}
 
-\newenvironment{GenesysTable}[1]{%
-    \par\vspace*{8pt}\noindent\RowColors
-    \begin{tabu} to \linewidth {#1}
-    \HeadRow
+\newenvironment{GenesysTable}[1]{
+    \par\vspace*{8pt}\noindent
+    \rowcolors{2}{white}{tableblue}
+    \tabularx{\textwidth}{#1}
+      \rowcolor{tablegold}
   }
-{\end{tabu}}
+{\endtabularx}
 
 %%%%%
 % Spacing for the Special line on tables
@@ -28,11 +29,34 @@
 % Character sheet tables
 %%%%%
 
-\newenvironment{SkillTable}
-{\sffamily\noindent\begin{tabu} to \columnwidth{l c@{} X[c]}%
-General Skills & Career? & Rank \\
-\hline\RowColors}
-{\end{tabu}}
+\newcolumntype{b}{>{\hsize=.40\hsize}X}
+\newcolumntype{m}{>{\hsize=.25\hsize\centering}X}
+\newcolumntype{s}{>{\hsize=.15\hsize\centering}X}
+
+\newenvironment{SkillTable}[1]
+{
+  \sffamily\noindent
+  \rowcolors{2}{white}{tableblue}
+  \tabularx{\columnwidth}{b m s b}%
+    \rowcolor{tablegold}
+    \textbf{#1} & \textbf{Carriere} & \textbf{Rang} & \textbf{Des}\\
+    \hline
+}
+{\endtabularx}
 
 
-\newcommand\Skills[3]{\bfseries #1 & #2 & #3 \\}
+\newcommand{\Skills}[5]
+{
+  \bfseries #1 & #2 & #3 & \noindent\Repeat{#4}{\ProficiencyDie}\Repeat{#5}{\AbilityDie} \\
+}
+
+\newcommand{\Repeat}[2]%
+{
+  \newcount\foo
+  \foo=#1
+  \loop
+    \ifnum \foo>0
+      #2
+      \advance \foo -1
+  \repeat
+}
